@@ -6,7 +6,7 @@ meta {
 
 post {
   url: {{domain_url}}/api/lift/{{tenant}}/sessions
-  body: none
+  body: json
   auth: apikey
 }
 
@@ -16,10 +16,19 @@ auth:apikey {
   placement: header
 }
 
+body:json {
+  {
+      "username": "{{username}}",
+      "password": "{{password}}"
+  }
+}
+
 script:post-response {
-  bru.environment.set("authToken", bru.response.headers.get("x-auth-token"));
-  var responseData = bru.response.json();
-  
+  expect(res.getStatus()).to.equal(200); 
+  if (res.getStatus() === 200) { 
+  bru.setEnvVar("authToken", res.getHeader("x-auth-token")); 
+  } 
+  const responseData = res.getBody();
 }
 
 settings {
