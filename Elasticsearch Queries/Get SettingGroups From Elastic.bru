@@ -1,0 +1,29 @@
+meta {
+  name: Get SettingGroups From Elastic
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{domain_url}}/api/lift/{{tenant}}/elastic/settinggroups/_doc/?source=json
+  body: none
+  auth: inherit
+}
+
+params:query {
+  source: json
+}
+
+headers {
+  Authorization: {{api_token}}
+  Content-Type: application/json
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+   To get all Ad creative templates or details about a specific template using eq params.
+  
+}

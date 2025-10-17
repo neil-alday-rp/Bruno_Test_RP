@@ -1,0 +1,75 @@
+meta {
+  name: List of Ads running at a Lift Player
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{elasticsearch_base_url}}/ads/_search
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "_source": "slot",
+    "from" : 0, "size" : 9999,
+    "query": {
+      "bool": {
+        "must_not": [
+          {
+            "match": {
+              "tags": "loa_smco_v1"
+            }
+          }
+        ], 
+        "must": [
+          {
+            "match": {
+              "published": "true"
+            }
+          },
+          {
+            "match": {
+              "archived": "false"
+            }
+          },
+          {
+            "nested": {
+              "path": "related",
+              "query": {
+                "bool": {
+                  "must": [
+                    {
+                      "match": {
+                        "related.locationcode": "{{location}}"
+                      }
+                    },
+                    {
+                      "range": {
+                        "related.startdate": {
+                          "lte": {{dayid}}
+                        }
+                      }
+                    },
+                    {
+                      "range": {
+                        "related.enddate": {
+                          "gte": {{dayid}}
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+}

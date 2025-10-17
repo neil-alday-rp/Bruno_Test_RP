@@ -1,0 +1,28 @@
+meta {
+  name: List of SettingsGroups from elastic
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{domain_url}}/api/lift/{{tenant}}/elastic/settinggroups/_doc?in(related.locationcode,us-2706786)&sort=-modifiedat&source=json&and(or(ge(related.enddate,20250127),n(related.enddate)),or(le(related.startdate,20250127),n(related.startdate)))&playercode={{playerCode}}&playerkey={{playerKey}}
+  body: none
+  auth: inherit
+}
+
+params:query {
+  in(related.locationcode,us-2706786): null
+  sort: -modifiedat
+  source: json
+  and(or(ge(related.enddate,20250127),n(related.enddate)),or(le(related.startdate,20250127),n(related.startdate))): null
+  playercode: {{playerCode}}
+  playerkey: {{playerKey}}
+}
+
+headers {
+  Authorization: {{api_token}}
+}
+
+settings {
+  encodeUrl: true
+}
