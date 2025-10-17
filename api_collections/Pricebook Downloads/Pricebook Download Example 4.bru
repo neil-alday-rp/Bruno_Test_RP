@@ -1,0 +1,26 @@
+meta {
+  name: Pricebook Download Example 4
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{domain_url}}/api/lift/{{tenant}}/pricebook?locationCode=us-12345
+  body: none
+  auth: apikey
+}
+
+params:query {
+  locationCode: us-12345
+}
+
+auth:apikey {
+  key: Authorization
+  value: {{authToken}}
+  placement: header
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
