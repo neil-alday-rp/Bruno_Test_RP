@@ -1,0 +1,24 @@
+meta {
+  name: Get Specific Ad 1
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{domain_url}}/api/lift/{{tenant}}/elastic/ads/_doc/?name='rptest-jeffrey-redbullz'
+  body: none
+  auth: inherit
+}
+
+params:query {
+  name: 'rptest-jeffrey-redbullz'
+}
+
+headers {
+  Authorization: {{authToken}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
