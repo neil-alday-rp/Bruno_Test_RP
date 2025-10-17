@@ -1,0 +1,25 @@
+meta {
+  name: Get Specific Ad 2
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{domain_url}}/api/lift/{{tenant}}/elastic/ads/_doc/?or(eq(name,"Monster Venom"),eq(name,'rptest-jeffrey-redbullz'))&source=name,scheduler,createdat
+  body: none
+  auth: inherit
+}
+
+params:query {
+  "or(eq(name,\"Monster Venom\"),eq(name,'rptest-jeffrey-redbullz'))": 
+  source: name,scheduler,createdat
+}
+
+headers {
+  Authorization: {{authToken}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
