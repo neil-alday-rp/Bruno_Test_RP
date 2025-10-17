@@ -1,0 +1,28 @@
+meta {
+  name: login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{domain_url}}/api/lift/{{tenant}}/sessions
+  body: none
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authorization
+  value: {{authToken}}
+  placement: header
+}
+
+script:post-response {
+  bru.environment.set("authToken", bru.response.headers.get("x-auth-token"));
+  var responseData = bru.response.json();
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
