@@ -1,0 +1,10 @@
+{
+  "version": "1",
+  "name": "aws_secrets",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git",
+    "/environments"
+  ]
+}
