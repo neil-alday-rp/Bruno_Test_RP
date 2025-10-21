@@ -2,6 +2,8 @@
 
 Sample Bruno API testing repository demonstrating Bruno as an offline-first alternative to Postman.
 
+For more information, see the [Bruno Test RP Confluence page](https://rocketpartners.atlassian.net/l/cp/9XgLPFuv) and visit other pages under the same folder.
+
 ## Quick Start
 
 ### Prerequisites
