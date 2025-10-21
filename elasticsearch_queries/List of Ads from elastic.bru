@@ -1,0 +1,31 @@
+meta {
+  name: List of Ads from elastic
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{domain_url}}/api/lift/{{tenant}}/elastic/ads/_doc/?sort=-modifiedat&archived=false&source=json,related&excludes=*.adprops,*.adschedules,*.adtriggers,*.adcompleters
+  body: none
+  auth: inherit
+}
+
+params:query {
+  sort: -modifiedat
+  archived: false
+  source: json,related
+  excludes: *.adprops,*.adschedules,*.adtriggers,*.adcompleters
+}
+
+headers {
+  Authorization: {{api_token}}
+}
+
+settings {
+  encodeUrl: true
+}
+
+docs {
+  To get a list of ads. This api will also support the filters mentioned in https://github.com/RocketPartners/rocket-inversion.
+  
+}

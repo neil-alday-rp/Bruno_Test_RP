@@ -1,0 +1,60 @@
+meta {
+  name: get ads for a division from elastic
+  type: http
+  seq: 14
+}
+
+get {
+  url: https://api.circleklift.com/api/lift/us/elastic/ads/_doc/?sort=-modifiedat&source=id,dochash,name,modifiedat&excludes=*.adprops,*.adschedules,*.adtriggers,*.adcompleters&published=true&archived=false&pageSize=510&in(related.divisions,"Northern Tier")&lt(related.startdate,20250603)&ge(related.enddate,20250520)&order=modifiedat
+  body: none
+  auth: inherit
+}
+
+params:query {
+  sort: -modifiedat
+  source: id,dochash,name,modifiedat
+  excludes: *.adprops,*.adschedules,*.adtriggers,*.adcompleters
+  published: true
+  archived: false
+  pageSize: 510
+  "in(related.divisions,\"Northern Tier\")": null
+  lt(related.startdate,20250603): null
+  ge(related.enddate,20250520): null
+  order: modifiedat
+  ~order: name
+}
+
+headers {
+  Authorization: {{api_token}}
+}
+
+script:post-response {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+      var jsonData = res.getBody();
+  
+      var buAdList = [];
+  
+      for( const ad of jsonData.data) {
+          var keep  = false;
+  
+          for( const schedule of ad.related) {
+              if(schedule.locationcode.length > 300) {
+                  keep = true;
+              }
+          }
+  
+          if(true == keep ) {
+              //buAdList.add([ad.id, ad.name]);
+              buAdList.add(ad.id);
+          }
+      }
+  
+      console.log("total ads: " + buAdList.length + "; " + buAdList);
+}
+
+settings {
+  encodeUrl: true
+}

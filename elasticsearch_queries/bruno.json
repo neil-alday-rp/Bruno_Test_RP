@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "elasticsearch_queries",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
