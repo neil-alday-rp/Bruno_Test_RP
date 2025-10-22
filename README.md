@@ -48,9 +48,26 @@ For more information, see the [Bruno Test RP Confluence page](https://rocketpart
 
 ## Important Notes
 
-### ⚠️ Environment Variables
+### Environment Variables
 
-**CRITICAL**: Do not commit environment files with credentials.
+AWS Path and Profile: **REQUIRED** when running `Portal Dev Login` request with Pre Request Script
+
+- Create a Collection Environment
+- Add the following variables:
+
+| Variable    | Value                |
+|-------------|----------------------|
+| aws_path    | `/usr/local/bin/aws` |
+| aws_profile | `(your profile)`     |
+
+- aws_path: Note that `/usr/local/bin/aws` is the default path in macOS
+  - This is an optional field for mac users since the script uses this path by default
+- aws_profile: ensure you have set this in your `~/.aws/config` and `~/.aws/credentials` files
+  - In `~/.aws/config`, set your `secret_id` (strictly the same name "secret_id")
+  - In `~/.aws/config`, set `output = json`
+- Ensure the created environment is selected in the dropdown
+
+⚠️ **CRITICAL**: Do not commit environment files with credentials.
 
 - Environment files contain your local configurations
 - Be careful with `git add` to avoid staging environment changes
@@ -75,6 +92,8 @@ See individual request scripts for examples.
 
 ```
 .
+├── environments/
+│   └── aws_settings.bru
 ├── collection-name/
 │   ├── requests/
 │   │   ├── auth/
