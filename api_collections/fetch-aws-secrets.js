@@ -1,0 +1,53 @@
+function fetchAwsSecrets(bru, req) {
+    const requestContent = JSON.stringify(req);
+    const secretPattern = /\{\{(\w+)\}\}/g;
+    const matches = [...requestContent.matchAll(secretPattern)];
+    const requiredSecrets = [...new Set(matches.map(m => m[1]))];
+
+    const missingSecrets = requiredSecrets.filter(key => !bru.getVar(key));
+
+    if (missingSecrets.length > 0) {
+        console.log(`🔄 Fetching secrets from AWS...`);
+
+        try {
+            const { execSync } = require('child_process');
+
+            // Change this to your AWS CLI path
+            const awsPath = bru.getEnvVar('aws_path') || '/usr/local/bin/aws';
+
+            // Use your specific AWS profile
+            const awsProfile = bru.getEnvVar('aws_profile') || 'default';
+
+            console.log(`Using AWS profile: ${awsProfile}`);
+
+            // Read secret_id from AWS config for this profile
+            const secretId = execSync(
+                `${awsPath} configure get secret_id --profile ${awsProfile}`,
+                { encoding: 'utf8' }
+            ).trim();
+
+            console.log(`Fetching secret: ${secretId}`);
+
+            // Fetch secret using the profile
+            const secretJson = execSync(
+                `${awsPath} secretsmanager get-secret-value --secret-id ${secretId} --profile ${awsProfile} --query SecretString --output text`,
+                { encoding: 'utf8' }
+            );
+
+            const secretData = JSON.parse(secretJson);
+            Object.keys(secretData).forEach(key => {
+                bru.setVar(key, secretData[key]);
+            });
+
+            console.log('✅ Secrets loaded');
+
+        } catch (error) {
+            console.error('❌ Failed to fetch secrets:', error.message);
+            throw error;
+        }
+    } else {
+        console.log('✅ All required secrets already loaded');
+    }
+}
+
+module.exports = { fetchAwsSecrets };
